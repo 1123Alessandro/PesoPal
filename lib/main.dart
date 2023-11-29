@@ -36,9 +36,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      // initialRoute: '/',
+      home: MyHomePage(title: 'Hello world',),
       routes: {
-        '/': (context) => Home(),
+        // '/': (context) => Home(),
+        '/hatdog': (context) => Home(),
         '/charts': (context) => Charts(),
         '/records': (context) => Records(),
         '/add': (context) => AddRecord(),

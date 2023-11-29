@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'Home.dart';
+import 'Charts.dart';
+import 'Records.dart';
+import 'AddRecord.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +36,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => Home(),
+        '/charts': (context) => Charts(),
+        '/records': (context) => Records(),
+        '/add': (context) => AddRecord(),
+      },
     );
   }
 }

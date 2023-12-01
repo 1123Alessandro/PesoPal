@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:peso_pal/DatabaseManager.dart';
 
+import 'Transaction.dart';
+import 'DatabaseManager.dart';
+import 'Earn.dart';
+import 'Expense.dart';
 
 const activeCardColor = Color(0xFFC6C5B9);
 final nameController = TextEditingController();
+final dateController = TextEditingController();
+final priceController = TextEditingController();
+final typeController = TextEditingController();
 
 class AddPage extends StatefulWidget {
   @override
@@ -75,6 +83,7 @@ class _AddRecordState extends State<AddPage> {
                       ),
                     ),
                     TextFormField(
+                      controller: dateController,
                       keyboardType: TextInputType.datetime,
                       inputFormatters: [
                         // TODO: try a dropdown box for date input
@@ -96,6 +105,7 @@ class _AddRecordState extends State<AddPage> {
                       ),
                     ),
                     TextFormField(
+                      controller: priceController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         // TODO: check if it works on only digits
@@ -217,10 +227,20 @@ class _AddRecordState extends State<AddPage> {
                     FloatingActionButton(
                         child: Icon(Icons.check),
                         onPressed: () {
-                          AddRecord().insertTodo(Todo(
-                              title: titleTextController.text,
-                              content: descriptionTextController.text));
-                          Navigator.pop(context, "Your todo has been saved.");
+                          if(typeController.text == 'Earn') {
+                            DatabaseManager.instance.insertTxn(Earn(
+                                name: nameController.text,
+                                price: priceController.text,
+                                date: dateController.text));
+                            Navigator.pop(context, "Your todo has been saved.");
+                          }
+                          else {
+                            DatabaseManager.instance.insertTxn(Expense(
+                                name: nameController.text,
+                                price: priceController.text,
+                                date: dateController.text));
+                            Navigator.pop(context, "Your todo has been saved.");
+                          }
                         }),
                   ],
                 ),

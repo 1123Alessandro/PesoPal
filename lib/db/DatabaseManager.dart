@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
@@ -5,7 +7,6 @@ import 'package:sqflite_common/sqlite_api.dart';
 import 'Transaction.dart';
 import 'Earn.dart';
 import 'Expense.dart';
-
 
 class DatabaseManager {
   //Create a private constructor
@@ -33,8 +34,8 @@ class DatabaseManager {
   insertTxn(Txn txn) async {
     final db = await database;
     var res;
-    if(type == 'Earn')
-      res = await db.insert(Txn.TABLENAME, Earn.toMap(),
+    if(txn is Earn)
+      res = await db.insert(Txn.TABLENAME, earn.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     else
       res = await db.insert(Txn.TABLENAME, Expense.toMap(),

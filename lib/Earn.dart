@@ -2,10 +2,10 @@ import 'Transaction.dart';
 import 'TxnType.dart';
 import 'dart:core';
 
-class Expense extends Txn {
+class Earn extends Txn {
 
-  Expense({required name, required price, required date}) : super(name: name, price: price, date: date) {
-    this.setType(TxnType.Expense);
+  Earn({required name, required price, required date}) : super(name: name, price: price, date: date) {
+    this.setType(TxnType.Earn);
   }
 
   Map<String, dynamic> toMap() {
@@ -13,8 +13,8 @@ class Expense extends Txn {
       'id': this.getID(),
       'name': this.getName(),
       'price': this.getPrice(),
-      'date': this.getDate(),
-      'type': 'Expense',
+      'date': this.getDate().toString(),
+      'type': 'Earn',
     };
   }
 }

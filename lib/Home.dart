@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'DatabaseManager.dart';
 
 const activeCardColor = Color(0xFFC6C5B9);
 

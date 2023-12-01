@@ -316,20 +316,27 @@ class _AddRecordState extends State<AddPage> {
                     FloatingActionButton(
                         child: Icon(Icons.check),
                         onPressed: () {
+                          DatabaseManager dbmn = DatabaseManager();
+                          dbmn.initializeDatabase();
                           if (selectedType == TxnType.Earn) {
                             print('You selected EARN');
                             print('Txn Name: ${nameController.text}');
                             print('Txn Price: ${priceController.text}');
                             print('Txn Date: ${dateController.text}');
+                            print('ADDING TO DATABASE...');
+                            dbmn.insertTxn(Earn(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text)));
                           }
                           else if (selectedType == TxnType.Expense) {
                             print('You selected EXPENSE');
                             print('Txn Name: ${nameController.text}');
                             print('Txn Price: ${priceController.text}');
                             print('Txn Date: ${dateController.text}');
+                            print('ADDING TO DATABASE...');
+                            dbmn.insertTxn(Expense(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text)));
                           }
                           else {
                             print('ERROR: Please select an expense type');
+                            dbmn.retrieveTxn();
                           }
 
                          /* if(typeController.text == 'Earn') {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peso_pal/constants.dart';
+import 'constants.dart';
 import 'package:intl/intl.dart';
 
 import 'Transaction.dart';

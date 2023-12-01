@@ -2,7 +2,7 @@ import 'Transaction.dart';
 import 'TxnType.dart';
 import 'dart:core';
 
-class Expense extends Transaction {
+class Expense extends Txn {
 
   TxnType type = TxnType.Expense;
 

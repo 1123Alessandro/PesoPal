@@ -2,7 +2,7 @@ import 'Transaction.dart';
 import 'TxnType.dart';
 import 'dart:core';
 
-class Earn extends Transaction {
+class Earn extends Txn {
 
   TxnType type = TxnType.Earn;
 

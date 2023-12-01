@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
@@ -14,14 +12,14 @@ class DatabaseManager {
 
   static const databaseName = 'transaction_database.db';
   static final DatabaseManager instance = DatabaseManager._();
-  static Database _database;
+  /*static Database _database;
 
   Future<Database> get database async {
     if (_database == null) {
       return await initializeDatabase();
     }
     return _database;
-  }
+  }*/
 
   initializeDatabase() async {
     return await openDatabase(join(await getDatabasesPath(), databaseName),
@@ -30,7 +28,7 @@ class DatabaseManager {
               "CREATE TABLE Transaction(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, type TEXT, name TEXT, date TEXT, amount DOUBLE)");
         });
   }
-
+/*
   insertTxn(Txn txn) async {
     final db = await database;
     var res;
@@ -75,5 +73,5 @@ class DatabaseManager {
   deleteTxn(int id) async {
     var db = await database;
     db.delete(Txn.TABLENAME, where: 'id = ?', whereArgs: [id]);
-  }
+  }*/
 }

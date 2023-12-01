@@ -1,13 +1,14 @@
 import 'dart:core';
 import 'package:intl/intl.dart';
 
-class Transaction {
+class Txn {
   String _name = 'test';
   double _price = 0.00;
   String _id = '000';
   DateTime _date = DateTime(1970, 4, 1);
+  static const String TABLENAME = "Transaction";
 
-  Transaction({required name, required price, required date}) {
+  Txn({required name, required price, required date}) {
     this._name = name;
     this._price = price;
     this._date = date;
@@ -42,3 +43,5 @@ class Transaction {
     this._date = date;
   }
 }
+
+

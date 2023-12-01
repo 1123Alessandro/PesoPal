@@ -21,7 +21,7 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddRecordState extends State<AddPage> {
-  TxnType selectedType = TxnType.Earn;
+  TxnType selectedType = TxnType.None;
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +118,7 @@ class _AddRecordState extends State<AddPage> {
                           onTap: () {
                             setState(() {
                               selectedType = TxnType.Earn;
+                              print('EARN selected');
                             });
                           },
                           child: ReusableCard(
@@ -134,6 +135,7 @@ class _AddRecordState extends State<AddPage> {
                           onTap: () {
                             setState(() {
                               selectedType = TxnType.Expense;
+                              print('EXPENSE selected');
                             });
                           },
                           child: ReusableCard(
@@ -314,6 +316,22 @@ class _AddRecordState extends State<AddPage> {
                     FloatingActionButton(
                         child: Icon(Icons.check),
                         onPressed: () {
+                          if (selectedType == TxnType.Earn) {
+                            print('You selected EARN');
+                            print('Txn Name: ${nameController.text}');
+                            print('Txn Price: ${priceController.text}');
+                            print('Txn Date: ${dateController.text}');
+                          }
+                          else if (selectedType == TxnType.Expense) {
+                            print('You selected EXPENSE');
+                            print('Txn Name: ${nameController.text}');
+                            print('Txn Price: ${priceController.text}');
+                            print('Txn Date: ${dateController.text}');
+                          }
+                          else {
+                            print('ERROR: Please select an expense type');
+                          }
+
                          /* if(typeController.text == 'Earn') {
                             DatabaseManager.instance.insertTxn(Earn(
                                 name: nameController.text,

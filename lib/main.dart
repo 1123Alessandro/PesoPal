@@ -4,22 +4,22 @@ import 'Analytics.dart';
 import 'TransactionHistory.dart';
 import 'AddRecord.dart';
 
-void main() => runApp(HomePage());
+void main() => runApp(Home());
 
-class HomePage extends StatelessWidget {
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
+      /* theme: ThemeData.dark().copyWith(
         primaryColor: Color(0xFFDCDCDC),
         appBarTheme: AppBarTheme(
           backgroundColor: Color(0xFFFDFDFF),
         ),
         scaffoldBackgroundColor: Color(0xFFFDFDFF),
-      ),
+      ), */
       // TODO: change method name per webpage view
-      home: HomePage(),
+      home: AddPage(),
     );
   }
 }

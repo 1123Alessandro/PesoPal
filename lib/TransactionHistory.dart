@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'constants.dart';
+import 'TxnType.dart';
+import 'DatabaseManager.dart';
 
 const activeCardColor = Color(0xFFC6C5B9);
+String transactionName = '';
+String transactionDate = '';
+int transactionPrice = 0;
+//final List<Map> items = List<String>.generate(10000, (i) => '$i');
 
 class HistoryPage extends StatefulWidget {
   @override
@@ -8,6 +16,10 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _TransactionHistoryState extends State<HistoryPage> {
+  TxnType type = TxnType.Earn;
+  //List<Map> items = List<String>.generate(10000, (i) => '$i');
+  //_TransactionHistoryState({required this.items});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,17 +49,42 @@ class _TransactionHistoryState extends State<HistoryPage> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
+      body: Center(
+        child: ListView.builder(
+          //itemCount: items.length,
+          itemBuilder: (context, index) {
+            if(type == TxnType.Earn) {
+              return ListTile(
+                leading:
+                Icon(
+                  CupertinoIcons.arrowtriangle_up_fill,
+                  size: 30.0,
+                  color: incomeArrowIn,
+                ),
+                //title: Text('Item ${items[index]}'),
+                subtitle: Text('Item description'),
+                trailing: Icon(Icons.more_vert),
+              );
+            }
+            else {
+              return ListTile(
+                leading:
+                Icon(
+                  CupertinoIcons.arrowtriangle_down_fill,
+                  size: 100.0,
+                  color: expensesArrowIn,
+                ),
+                //title: Text('Item ${items[index]}'),
+                subtitle: Text('Item description'),
+                trailing: Icon(Icons.more_vert),
+              );
+            }
+          },
+        )
           // TODO: depends on the number of records
           // TODO: change Expanded
-          Container(
-            child: ReusableCard(
-              color: activeCardColor,
-            ),
-          ),
+
           // TODO: add Previous and Next TextButtons
-        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
@@ -84,19 +121,25 @@ class _TransactionHistoryState extends State<HistoryPage> {
   }
 }
 
-class ReusableCard extends StatelessWidget {
+/*class ReusableCard extends StatelessWidget {
   final Color color;
-  ReusableCard({required this.color});
+  final IconData icon;
+  final Text text;
+  final Widget leading;
+
+  ReusableCard({required this.color, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(15.0),
-      height: 50,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10.0),
+    return ListTile(
+      leading: Icon(
+          icon,
+          size: 20.0,
+          color: color,
       ),
+      title: Text(transactionName),
+      subtitle: Text(transactionDate),
+      trailing: Text('$transactionPrice'),
     );
   }
-}
+}*/

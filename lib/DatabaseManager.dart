@@ -7,8 +7,6 @@ import 'Earn.dart';
 import 'Expense.dart';
 
 class DatabaseManager {
-  //Create a private constructor
-  //DatabaseManager._();
 
   String databaseName = 'transaction.db';
   String tableName = 'Trnsctn';
@@ -29,18 +27,17 @@ class DatabaseManager {
       (4217387442, "testing", 420.0, "2023-12-2", "Earn"),
       (6318232871, "testing", 420.0, "2023-12-2", "Earn")
       ''');
-      // (3172612479, "testing", 420.0, "2023-12-2", "Expense"),
-      // (5056126351, "testing", 420.0, "2023-12-2", "Expense"),
-      // (9514090978, "testing", 420.0, "2023-12-2", "Earn"),
-      // (2727647166, "testing", 420.0, "2023-12-2", "Earn"),
-      // (7990108944, "testing", 420.0, "2023-12-2", "Expense"),
-      // (1234236845, "testing", 420.0, "2023-12-2", "Earn"),
-      // (1063620030, "testing", 420.0, "2023-12-2", "Earn"),
-      // (2884328870, "testing", 420.0, "2023-12-2", "Earn"),
-      // (8059116824, "testing", 420.0, "2023-12-2", "Expense"),
-      // (9182066726, "testing", 420.0, "2023-12-2", "Expense"),
-      // (6476168608, "testing", 420.0, "2023-12-2", "Expense")
-      // ''');
+      /*(3172612479, "testing", 420.0, "2023-12-2", "Expense"),
+      (5056126351, "testing", 420.0, "2023-12-2", "Expense"),
+      (9514090978, "testing", 420.0, "2023-12-2", "Earn"),
+      (2727647166, "testing", 420.0, "2023-12-2", "Earn"),
+      (7990108944, "testing", 420.0, "2023-12-2", "Expense"),
+      (1234236845, "testing", 420.0, "2023-12-2", "Earn"),
+      (1063620030, "testing", 420.0, "2023-12-2", "Earn"),
+      (2884328870, "testing", 420.0, "2023-12-2", "Earn"),
+      (8059116824, "testing", 420.0, "2023-12-2", "Expense"),
+      (9182066726, "testing", 420.0, "2023-12-2", "Expense"),
+      (6476168608, "testing", 420.0, "2023-12-2", "Expense")*/
     });
   }
 

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+
 import 'Home.dart';
 import 'DatabaseManager.dart';
+import 'constants.dart';
 
 
-class Welcome extends StatefulWidget {
-  static const String id = "welcome";
+class WelcomePage extends StatefulWidget {
 
   @override
   _WelcomeState createState() => _WelcomeState();
 }
 
-class _WelcomeState extends State<Welcome> {
+class _WelcomeState extends State<WelcomePage> {
   bool hasBeenPressed = false;
 
   @override
@@ -29,14 +30,16 @@ class _WelcomeState extends State<Welcome> {
                   Text(
                     "PesoPal",
                     style: TextStyle(
+                      fontFamily: 'Agrandir',
                       color: Color(0xFF546A7B),
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       fontSize: 50.0,
                     ),
                   ),
                   Text(
                     "Your peso's best pal.",
                     style: TextStyle(
+                      fontFamily: 'Agrandir',
                       fontWeight: FontWeight.w400,
                       fontSize: 20.0,
                     ),
@@ -67,6 +70,7 @@ class _WelcomeState extends State<Welcome> {
                           child: Text(
                             'Start',
                             style: TextStyle(
+                              fontFamily: 'Agrandir',
                               fontWeight: FontWeight.w400,
                               fontSize: 30.0,
                               color: Color(0xFF546A7B),

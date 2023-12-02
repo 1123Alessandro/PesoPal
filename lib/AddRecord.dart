@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pesopal/Home.dart';
-import 'constants.dart';
 import 'package:intl/intl.dart';
 
-import 'Transaction.dart';
+import 'constants.dart';
 import 'DatabaseManager.dart';
 import 'Earn.dart';
 import 'Expense.dart';
@@ -34,7 +32,9 @@ class _AddRecordState extends State<AddPage> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             color: Color(0xFF393D3F),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           title: Row(
             children: [
@@ -48,7 +48,8 @@ class _AddRecordState extends State<AddPage> {
               Text(
                 'ADD RECORD',
                 style: TextStyle(
-                  color: Color(0xFFFFFFFF),
+                  fontFamily: 'Agrandir',
+                  color: Color(0xFF393D3F),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -56,9 +57,6 @@ class _AddRecordState extends State<AddPage> {
                 icon: Icon(Icons.cached),
                 color: Color(0xFF393D3F),
                 onPressed: () {
-                  /*nameController.clear();
-                  dateController.clear();
-                  priceController.clear();*/
                   showDialog(
                     context: context,
                     builder: (ctx) => AlertDialog(
@@ -106,17 +104,10 @@ class _AddRecordState extends State<AddPage> {
             ],
           ),
           actions: [
-            /*IconButton(
-              icon: Icon(Icons.check),
-              color: Color(0xFF62929E),
-              onPressed: () {},
-            ),*/
             TextButton(
                 child: Icon(Icons.check, color: Color(0xFF62929E)),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Processing Data')),
                     );
@@ -141,6 +132,7 @@ class _AddRecordState extends State<AddPage> {
                       dbmn.insertTxn(Expense(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text))).then((value) {
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HistoryPage(lis: value)), (route) => false);
                       });
+                      //dbmn.retrieveTxn();
                     }
                     else {
                       print('ERROR: Please select an expense type');
@@ -187,26 +179,23 @@ class _AddRecordState extends State<AddPage> {
                       height: 20.0,
                     ),
                     Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
                           onTap: () {
                             setState(() {
                               selectedType = TxnType.Earn;
-                              DatabaseManager().retrieveTxn();
-                              // DatabaseManager().retrieveTxn().then((value) {
-                              //   print(selectedType);
-                              //   Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                              // });
                             });
                           },
-                          child: ReusableCard(
-                            color: selectedType == TxnType.Earn
-                                ? Color(0xFF546A7B)
-                                : Color(0xFF62929E),
-                            cardChild: Text("Earn",
-                              style: TextStyle(color: text2),
-                              textAlign: TextAlign.center,
+                          child: Expanded(
+                            child: ReusableCard(
+                              color: selectedType == TxnType.Earn
+                                  ? Color(0xFF546A7B)
+                                  : Color(0xFF62929E),
+                              cardChild: Text("Earn",
+                                style: TextStyle(color: text2),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
@@ -214,16 +203,17 @@ class _AddRecordState extends State<AddPage> {
                           onTap: () {
                             setState(() {
                               selectedType = TxnType.Expense;
-                              // DatabaseManager().createSamples();
                             });
                           },
-                          child: ReusableCard(
-                            color: selectedType == TxnType.Expense
-                                ? Color(0xFF546A7B)
-                                : Color(0xFF62929E),
-                            cardChild: Text("Expense",
-                              style: TextStyle(color: text2),
-                              textAlign: TextAlign.center,
+                          child: Expanded(
+                            child: ReusableCard(
+                              color: selectedType == TxnType.Expense
+                                  ? Color(0xFF546A7B)
+                                  : Color(0xFF62929E),
+                              cardChild: Text("Expense",
+                                style: TextStyle(color: text2),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),
@@ -235,12 +225,6 @@ class _AddRecordState extends State<AddPage> {
                     ),
                     TextFormField(
                       controller: dateController,
-                      /*inputFormatters: [
-                        // MaskTextInputFormatter(
-                        //   mask: '####-##-##',
-                        //   filter: {'#': RegExp(r'[0-9]')}
-                        // ),
-                      ],*/
                       cursorColor: Color(0xFF546A7B),
                       style: TextStyle(
                         color: Color(0xFF393D3F),
@@ -281,7 +265,6 @@ class _AddRecordState extends State<AddPage> {
                       controller: priceController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        // TODO: check if it works on only digits
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       cursorColor: Color(0xFF546A7B),
@@ -302,107 +285,6 @@ class _AddRecordState extends State<AddPage> {
                         return null;
                       },
                     ),
-                    // TextFormField(
-                    //   cursorColor: Color(0xFF546A7B),
-                    //   style: TextStyle(
-                    //     color: Color(0xFF393D3F),
-                    //   ),
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Name of Transaction',
-                    //     enabledBorder: myInputBorder(),
-                    //     focusedBorder: myFocusBorder(),
-                    //     hintStyle: TextStyle(
-                    //       color: Color(0xFF546A7B),
-                    //     ),
-                    //     filled: false,
-                    //     fillColor: Color(0xFFE8E8E8),
-                    //     prefixIcon: Padding(
-                    //       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    //       child: Align(
-                    //         widthFactor: 1.0,
-                    //         heightFactor: 1.0,
-                    //         child: Icon(
-                    //           Icons.description,
-                    //           color: Color(0xFFC6C5B9),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     border: OutlineInputBorder(
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    // ),
-                    // TextFormField(
-                    //   keyboardType: TextInputType.datetime,
-                    //   inputFormatters: [
-                    //     // TODO: try a dropdown box for date input
-                    //     // MaskTextInputFormatter(
-                    //     //   mask: '####-##-##',
-                    //     //   filter: {'#': RegExp(r'[0-9]')}
-                    //     // ),
-                    //   ],
-                    //   cursorColor: Color(0xFF546A7B),
-                    //   style: TextStyle(
-                    //     color: Color(0xFF393D3F),
-                    //   ),
-                    //   decoration: InputDecoration(
-                    //     labelText: 'Date of Transaction',
-                    //     enabledBorder: myInputBorder(),
-                    //     focusedBorder: myFocusBorder(),
-                    //     hintStyle: TextStyle(
-                    //       color: Color(0xFF546A7B),
-                    //     ),
-                    //     filled: false,
-                    //     fillColor: Color(0xFFE8E8E8),
-                    //     prefixIcon: Padding(
-                    //       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    //       child: Align(
-                    //         widthFactor: 1.0,
-                    //         heightFactor: 1.0,
-                    //         child: Icon(
-                    //           Icons.calendar_month,
-                    //           color: Color(0xFFC6C5B9),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     border: OutlineInputBorder(
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    // ),
-                    // TextFormField(
-                    //   keyboardType: TextInputType.number,
-                    //   inputFormatters: [
-                    //     // TODO: check if it works on only digits
-                    //     FilteringTextInputFormatter.digitsOnly,
-                    //   ],
-                    //   cursorColor: Color(0xFF546A7B),
-                    //   style: TextStyle(
-                    //     color: Color(0xFF393D3F),
-                    //   ),
-                    //   decoration: const InputDecoration(
-                    //     hintText: 'Amount',
-                    //     hintStyle: TextStyle(
-                    //       color: Color(0xFF546A7B),
-                    //     ),
-                    //     filled: false,
-                    //     fillColor: Color(0xFFE8E8E8),
-                    //     prefixIcon: Padding(
-                    //       padding: EdgeInsets.symmetric(vertical: 10.0),
-                    //       child: Align(
-                    //         widthFactor: 1.0,
-                    //         heightFactor: 1.0,
-                    //         child: Icon(
-                    //           Icons.money,
-                    //           color: Color(0xFFC6C5B9),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     border: OutlineInputBorder(
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -421,9 +303,8 @@ class ReusableCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 150.0,
       padding: EdgeInsets.all(15.0),
-      height: 50,
-      width: 180,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10.0),
@@ -442,13 +323,3 @@ OutlineInputBorder myInputBorder() {
     ),
   );
 }
-//
-// OutlineInputBorder myFocusBorder() {
-//   return OutlineInputBorder(
-//     borderRadius: BorderRadius.all(Radius.circular(10)),
-//     borderSide: BorderSide(
-//       color: Color(0xFFC6C5B9),
-//       width: 1,
-//     ),
-//   );
-// }

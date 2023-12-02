@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peso_pal/constants.dart';
+import 'dart:math';
 
 import 'Analytics.dart';
 import 'TransactionHistory.dart';
@@ -69,7 +70,7 @@ class _HomeLayoutState extends State<HomePage> {
                         ),
                       ),
                       Text(
-                        '${totalIncome - totalExpenses}',
+                        '${((totalIncome - totalExpenses).toStringAsFixed(2))}',
                         style: TextStyle(
                           fontFamily: 'Agrandir',
                           fontWeight: FontWeight.w900,
@@ -100,11 +101,11 @@ class _HomeLayoutState extends State<HomePage> {
                                       color: incomeArrowIn,
                                     ),
                                     SizedBox(
-                                      width: 10.0,
+                                      width: 5.0,
                                       height: 20.0,
                                     ),
                                     Text(
-                                      '$totalIncome',
+                                      '${totalIncome.toStringAsFixed(2)}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 20.0,
@@ -139,11 +140,11 @@ class _HomeLayoutState extends State<HomePage> {
                                     color: expensesArrowIn,
                                   ),
                                   SizedBox(
-                                    width: 10.0,
+                                    width: 5.0,
                                     height: 20.0,
                                   ),
                                   Text(
-                                    '$totalExpenses',
+                                    '${totalExpenses.toStringAsFixed(2)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 20.0,
@@ -178,6 +179,7 @@ class _HomeLayoutState extends State<HomePage> {
                       Text(
                         'Recent Transactions',
                         style: TextStyle(
+                          fontFamily: 'Agrandir',
                           fontWeight: FontWeight.w600,
                           fontSize: 20.0,
                         ),
@@ -191,14 +193,11 @@ class _HomeLayoutState extends State<HomePage> {
                                 MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
                             );
                           });
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => HistoryPage())
-                          // );
                         },
                         child: Text(
                           'See All',
                           style: TextStyle(
+                            fontFamily: 'Agrandir',
                             fontWeight: FontWeight.w600,
                             fontSize: 15.0,
                             decoration: TextDecoration.underline,
@@ -297,10 +296,6 @@ class _HomeLayoutState extends State<HomePage> {
                 setState(() {
                   selectedNav = NavBar.Home;
                 });
-                /*Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage())
-                );*/
               },
               icon: Icon(
                 Icons.home,
@@ -314,10 +309,13 @@ class _HomeLayoutState extends State<HomePage> {
                 setState(() {
                   selectedNav = NavBar.Analytics;
                 });
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AnalyticsPage())
-                );
+                var db = DatabaseManager();
+                db.retrieveTxn().then((value) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AnalyticsPage(lis: value,))
+                  );
+                });
               },
               icon: Icon(
                 Icons.pie_chart,

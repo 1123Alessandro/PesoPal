@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pesopal/AddRecord.dart';
-import 'Transaction.dart';
+
 import 'constants.dart';
 import 'TxnType.dart';
 import 'DatabaseManager.dart';
 import 'Home.dart';
-import 'EditRecord.dart';
-import 'main.dart';
+import 'AddRecord.dart';
 import 'UpdateRecord.dart';
 
 
@@ -49,7 +47,8 @@ class _TransactionHistoryState extends State<HistoryPage> {
           child: Text(
             'TRANSACTION HISTORY',
             style: TextStyle(
-              color: Color(0xFF546A7B),
+              fontFamily: 'Agrandir',
+              color: Color(0xFF393D3F),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -62,17 +61,9 @@ class _TransactionHistoryState extends State<HistoryPage> {
             ),
             onPressed: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UpdatePage(trenID: items[selected]['id'].toString(),))
+                  context,
+                  MaterialPageRoute(builder: (context) => UpdatePage(trenID: items[selected]['id'].toString(),))
               );
-              /*var db = DatabaseManager();
-              db.createSamples();
-              db.retrieveTxn().then((value) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditPage(lis: value,))
-                );
-              });*/
             },
           ),
         ],
@@ -82,8 +73,6 @@ class _TransactionHistoryState extends State<HistoryPage> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               var currItem = items[index];
-              // print(currItem['type']);
-              // print(currItem['type'] == 'Earn');
               if(currItem['type'] == 'Earn') {
                 return ListTile(
                     tileColor: selected == index? Color(0xFF62929E) : Color(0xFFFFFFFF),
@@ -92,10 +81,26 @@ class _TransactionHistoryState extends State<HistoryPage> {
                       size: 30.0,
                       color: incomeArrowIn,
                     ),
-                    title: Text(currItem['name']),
-                    subtitle: Text(currItem['date']),
-                    trailing: Text('PHP ${currItem['price'].toString()}'),
-                    hoverColor: Color(0xFF62929E),
+                    title: Text(
+                      currItem['name'],
+                      style: TextStyle(
+                        fontFamily: 'Agrandir',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      currItem['date'],
+                      style: TextStyle(
+                        fontFamily: 'Agrandir',
+                      ),
+                    ),
+                    trailing: Text(
+                      'PHP ${currItem['price'].toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontFamily: 'Agrandir',
+                        fontSize: 15.0,
+                      ),
+                    ),
                     onTap: () {
                       setState(() {
                         selected = index;
@@ -113,10 +118,26 @@ class _TransactionHistoryState extends State<HistoryPage> {
                     size: 30.0,
                     color: expensesArrowIn,
                   ),
-                  title: Text(currItem['name']),
-                  subtitle: Text(currItem['date']),
-                  trailing: Text('Php ${currItem['price'].toString()}'),
-                  hoverColor: Color(0xFF62929E),
+                  title: Text(
+                    currItem['name'],
+                    style: TextStyle(
+                      fontFamily: 'Agrandir',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    currItem['date'],
+                    style: TextStyle(
+                      fontFamily: 'Agrandir',
+                    ),
+                  ),
+                  trailing: Text(
+                    'Php ${currItem['price'].toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontFamily: 'Agrandir',
+                      fontSize: 15.0,
+                    ),
+                  ),
                   onTap: () {
                     setState(() {
                       selected = index;
@@ -135,8 +156,8 @@ class _TransactionHistoryState extends State<HistoryPage> {
         foregroundColor: Color(0xFFFDFDFF),
         onPressed: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddPage())
+              context,
+              MaterialPageRoute(builder: (context) => AddPage())
           );
         },
         tooltip: 'Increment',
@@ -151,7 +172,6 @@ class _TransactionHistoryState extends State<HistoryPage> {
             IconButton(
               onPressed: () {
                 DatabaseManager().dashBoard().then((value) {
-                  print('JJJJJJJJJJJJJSKDJFLSKDJFJ');
                   print(value.length);
                   Navigator.push(
                       context,
@@ -189,30 +209,12 @@ class _TransactionHistoryState extends State<HistoryPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(ctx).pop();
                           print('DELETING RECORD');
                           var record = items[selected];
                           print(record);
                           DatabaseManager().deleteTxn(record['id']).then((value) {
                             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HistoryPage(lis: value)), (route) => false);
                           });
-                          // var db = DatabaseManager();
-                          // db.retrieveTxn().then((value) {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
-                            // );
-                          //   print('CAN YOU PLEASE LOOK AT ME');
-                          //   print(value);
-                          //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HistoryPage(lis: value)), (route) => false);
-                          // });
-                          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Home()), (route) => false);
-                          // DatabaseManager().dashBoard().then((value) {
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => HomePage(dash: (value.length < 1) ? nones : value,))
-                          //   );
-                          // });
                         },
                         child: Container(
                           color: Color(0xFF546A7B),

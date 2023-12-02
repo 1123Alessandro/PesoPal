@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import 'package:peso_pal/constants.dart';
 
 import 'Analytics.dart';
 import 'TransactionHistory.dart';
 import 'DatabaseManager.dart';
 import 'AddRecord.dart';
 
-
 enum NavBar {Home, Analytics}
 const activeCardColor = Color(0xFFC6C5B9);
 
 class HomePage extends StatefulWidget {
-
   List<Map> dash;
   HomePage({required this.dash});
 
@@ -21,12 +19,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomePage> {
-
   List<Map> dash;
   NavBar selectedNav = NavBar.Home;
   double totalIncome = 500;
   double totalExpenses = 45;
-  // double totalBalance = 0;
+  //double totalBalance = 0;
 
   _HomeLayoutState({required this.dash}) {
     totalIncome = (dash[0]['type'] == 'Earn') ? dash[0]['total'] : dash[1]['total'];
@@ -37,54 +34,15 @@ class _HomeLayoutState extends State<HomePage> {
     print(totalExpenses);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: const Icon(
-            Icons.account_circle_rounded,
-            color: Color(0xFF393D3F),
-            size: 50,
-          ),
-        ),
-        title: Column(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(bottom: 2.5),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Welcome back,',
-                  style: TextStyle(
-                    color: Color(0xFF0A090C),
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  'Juan dela Cruz!',
-                  style: TextStyle(
-                    color: Color(0xFF546A7B),
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      // TODO: fix layout inside the first Expanded widget
       body: Column(
         children: <Widget>[
+          SizedBox(
+            width: 10.0,
+            height: 50.0,
+          ),
           Expanded(
             child: ReusableCard(
               color: activeCardColor,
@@ -94,6 +52,7 @@ class _HomeLayoutState extends State<HomePage> {
                   Text(
                     'Total Balance',
                     style: TextStyle(
+                      fontFamily: 'Agrandir',
                       fontWeight: FontWeight.w600,
                       fontSize: 25.0,
                     ),
@@ -104,14 +63,16 @@ class _HomeLayoutState extends State<HomePage> {
                       Text(
                         'PHP',
                         style: TextStyle(
-                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Agrandir',
+                          fontWeight: FontWeight.w900,
                           fontSize: 25.0,
                         ),
                       ),
                       Text(
                         '${totalIncome - totalExpenses}',
                         style: TextStyle(
-                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Agrandir',
+                          fontWeight: FontWeight.w900,
                           fontSize: 45.0,
                         ),
                       ),
@@ -209,6 +170,7 @@ class _HomeLayoutState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,6 +207,66 @@ class _HomeLayoutState extends State<HomePage> {
                       ),
                     ],
                   ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFDFDFF),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ListTile (
+                      leading: Icon(
+                        CupertinoIcons.arrowtriangle_up_fill,
+                        size: 30.0,
+                        color: incomeArrowIn,
+                      ),
+                      /*title: Text(currItem['name']),
+                          subtitle: Text(currItem['date']),
+                          trailing: Text('PHP ${currItem['price'].toString()}'),*/
+                      title: Text('Item 1'),
+                      subtitle: Text('Item description'),
+                      trailing: Icon(Icons.more_vert),
+                      hoverColor: Color(0xFF62929E),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFDFDFF),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ListTile (
+                      leading: Icon(
+                        CupertinoIcons.arrowtriangle_up_fill,
+                        size: 30.0,
+                        color: incomeArrowIn,
+                      ),
+                      /*title: Text(currItem['name']),
+                          subtitle: Text(currItem['date']),
+                          trailing: Text('PHP ${currItem['price'].toString()}'),*/
+                      title: Text('Item 1'),
+                      subtitle: Text('Item description'),
+                      trailing: Icon(Icons.more_vert),
+                      hoverColor: Color(0xFF62929E),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFDFDFF),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ListTile (
+                      leading: Icon(
+                        CupertinoIcons.arrowtriangle_up_fill,
+                        size: 30.0,
+                        color: incomeArrowIn,
+                      ),
+                      /*title: Text(currItem['name']),
+                          subtitle: Text(currItem['date']),
+                          trailing: Text('PHP ${currItem['price'].toString()}'),*/
+                      title: Text('Item 1'),
+                      subtitle: Text('Item description'),
+                      trailing: Icon(Icons.more_vert),
+                      hoverColor: Color(0xFF62929E),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -275,10 +297,10 @@ class _HomeLayoutState extends State<HomePage> {
                 setState(() {
                   selectedNav = NavBar.Home;
                 });
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(builder: (context) => HomePage())
-                // );
+                /*Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage())
+                );*/
               },
               icon: Icon(
                 Icons.home,

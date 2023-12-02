@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:peso_pal/constants.dart';
+import 'package:pesopal/Home.dart';
+import 'constants.dart';
 import 'package:intl/intl.dart';
 
 import 'Transaction.dart';
@@ -188,6 +189,11 @@ class _AddRecordState extends State<AddPage> {
                           onTap: () {
                             setState(() {
                               selectedType = TxnType.Earn;
+                              DatabaseManager().retrieveTxn();
+                              // DatabaseManager().retrieveTxn().then((value) {
+                              //   print(selectedType);
+                              //   Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                              // });
                             });
                           },
                           child: ReusableCard(
@@ -204,6 +210,7 @@ class _AddRecordState extends State<AddPage> {
                           onTap: () {
                             setState(() {
                               selectedType = TxnType.Expense;
+                              // DatabaseManager().createSamples();
                             });
                           },
                           child: ReusableCard(

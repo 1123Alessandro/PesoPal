@@ -4,10 +4,13 @@ import 'Analytics.dart';
 import 'TransactionHistory.dart';
 import 'AddRecord.dart';
 import 'EditRecord.dart';
+import 'DatabaseManager.dart';
+import 'Entrance.dart';
 
 void main() => runApp(Home());
 
 class Home extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +23,7 @@ class Home extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFFFDFDFF),
       ),*/
       // TODO: change method name per webpage view
-      home: HistoryPage(),
+      home: Entrance(),
     );
   }
 }

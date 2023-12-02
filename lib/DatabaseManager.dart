@@ -68,7 +68,7 @@ class DatabaseManager {
 
     List<Map<String, dynamic>> maps = await db.query(tableName);
 
-    print(maps);
+    // print(maps);
     return maps;
   }
 
@@ -81,5 +81,14 @@ class DatabaseManager {
   Future deleteTxn(int id) async {
     var db = await getDB();
     db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Map>> dashBoard() async {
+    var db = await initializeDatabase();
+
+    List<Map<String, dynamic>> maps = await db.rawQuery('SELECT SUM(price) as total, type FROM $tableName GROUP BY type');
+
+    print(maps);
+    return maps;
   }
 }

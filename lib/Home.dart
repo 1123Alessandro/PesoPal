@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peso_pal/constants.dart';
+import 'constants.dart';
 
 import 'Analytics.dart';
 import 'TransactionHistory.dart';
@@ -11,15 +11,31 @@ enum NavBar {Home, Analytics}
 const activeCardColor = Color(0xFFC6C5B9);
 
 class HomePage extends StatefulWidget {
+
+  List<Map> dash;
+  HomePage({required this.dash});
+
   @override
-  _HomeLayoutState createState() => _HomeLayoutState();
+  _HomeLayoutState createState() => _HomeLayoutState(dash: this.dash);
 }
 
 class _HomeLayoutState extends State<HomePage> {
+
+  List<Map> dash;
   NavBar selectedNav = NavBar.Home;
   double totalIncome = 500;
   double totalExpenses = 45;
-  double totalBalance = 0;
+  // double totalBalance = 0;
+
+  _HomeLayoutState({required this.dash}) {
+    totalIncome = (dash[0]['type'] == 'Earn') ? dash[0]['total'] : dash[1]['total'];
+    totalExpenses = (dash[0]['type'] == 'Expense') ? dash[0]['total'] : dash[1]['total'];
+    print('LOOK AT THIS DASHBOARD');
+    print(dash);
+    print(totalIncome);
+    print(totalExpenses);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +255,20 @@ class _HomeLayoutState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFF62929e),
         foregroundColor: Color(0xFFFDFDFF),
-        onPressed: () {},
+        onPressed: () {
+          print('hello po');
+          // DatabaseManager().dashBoard().then((value) {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => HomePage())
+          //   );
+          // });
+          // db.retrieveTxn().then((value) {
+          // Navigator.push(
+          // context,
+          // MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
+          // );
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
@@ -254,10 +283,10 @@ class _HomeLayoutState extends State<HomePage> {
                 setState(() {
                   selectedNav = NavBar.Home;
                 });
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage())
-                );
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => HomePage())
+                // );
               },
               icon: Icon(
                 Icons.home,

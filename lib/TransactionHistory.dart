@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pesopal/AddRecord.dart';
 import 'Transaction.dart';
 import 'constants.dart';
 import 'TxnType.dart';
@@ -7,6 +8,7 @@ import 'DatabaseManager.dart';
 import 'Home.dart';
 import 'EditRecord.dart';
 import 'main.dart';
+import 'UpdateRecord.dart';
 
 
 const activeCardColor = Color(0xFFC6C5B9);
@@ -59,6 +61,10 @@ class _TransactionHistoryState extends State<HistoryPage> {
               color: Color(0xFF62929E),
             ),
             onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UpdatePage(trenID: items[selected]['id'].toString(),))
+              );
               /*var db = DatabaseManager();
               db.createSamples();
               db.retrieveTxn().then((value) {
@@ -128,8 +134,10 @@ class _TransactionHistoryState extends State<HistoryPage> {
         backgroundColor: Color(0xFF62929e),
         foregroundColor: Color(0xFFFDFDFF),
         onPressed: () {
-          print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-          DatabaseManager().retrieveTxn();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddPage())
+          );
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

@@ -56,12 +56,13 @@ class DatabaseManager {
     return openDatabase(databaseName);
   }
 
-  Future insertTxn(Txn txn) async {
+  Future<List<Map>> insertTxn(Txn txn) async {
     var db = await initializeDatabase();
     // print('CHECK THIS OUT');
     // print(db);
     var id = await db.insert(tableName, txn.toMap());
     print('THIS IS THE ID AFTER INSERTING THE RECORD:\t${id}');
+    return await retrieveTxn();
   }
 
   Future<List<Map>> retrieveTxn() async {
@@ -69,14 +70,14 @@ class DatabaseManager {
 
     List<Map<String, dynamic>> maps = await db.query(tableName);
 
-    // print(maps);
+    print(maps);
     return maps;
   }
 
   Future updateTxn(Txn txn) async {
     var db = await getDB();
 
-    await db.update(tableName, txn.toMap(), where: 'id = ?', whereArgs: txn.toMap()['id']);
+    await db.update(tableName, txn.toMap(), where: 'id = ?', whereArgs: [txn.toMap()['id']]);
   }
 
   Future<List<Map>> deleteTxn(int id) async {

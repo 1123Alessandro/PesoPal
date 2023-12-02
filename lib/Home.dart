@@ -222,7 +222,6 @@ class _HomeLayoutState extends State<HomePage> {
                       TextButton(
                         onPressed: () {
                           var db = DatabaseManager();
-                          db.createSamples();
                           db.retrieveTxn().then((value) {
                             Navigator.push(
                                 context,

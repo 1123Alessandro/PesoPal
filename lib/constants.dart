@@ -54,3 +54,8 @@ const kBMITextStyle = TextStyle(
 const kBodyTextStyle = TextStyle(
   fontSize: 22.0,
 );
+
+final List<Map> nones = [
+  {'total': 0.0, 'type': 'Earn'},
+  {'total': 0.0, 'type': 'Expense'},
+];

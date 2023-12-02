@@ -20,7 +20,7 @@ class Entrance extends StatelessWidget {
             DatabaseManager().dashBoard().then((value) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage(dash: value,))
+                MaterialPageRoute(builder: (context) => HomePage(dash: (value.length <= 1) ? nones : value,))
               );
             });
           },

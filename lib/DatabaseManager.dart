@@ -27,19 +27,20 @@ class DatabaseManager {
       (8040942186, "testing", 420.0, "2023-12-2", "Earn"),
       (5151532969, "testing", 420.0, "2023-12-2", "Expense"),
       (4217387442, "testing", 420.0, "2023-12-2", "Earn"),
-      (6318232871, "testing", 420.0, "2023-12-2", "Earn"),
-      (3172612479, "testing", 420.0, "2023-12-2", "Expense"),
-      (5056126351, "testing", 420.0, "2023-12-2", "Expense"),
-      (9514090978, "testing", 420.0, "2023-12-2", "Earn"),
-      (2727647166, "testing", 420.0, "2023-12-2", "Earn"),
-      (7990108944, "testing", 420.0, "2023-12-2", "Expense"),
-      (1234236845, "testing", 420.0, "2023-12-2", "Earn"),
-      (1063620030, "testing", 420.0, "2023-12-2", "Earn"),
-      (2884328870, "testing", 420.0, "2023-12-2", "Earn"),
-      (8059116824, "testing", 420.0, "2023-12-2", "Expense"),
-      (9182066726, "testing", 420.0, "2023-12-2", "Expense"),
-      (6476168608, "testing", 420.0, "2023-12-2", "Expense")
+      (6318232871, "testing", 420.0, "2023-12-2", "Earn")
       ''');
+      // (3172612479, "testing", 420.0, "2023-12-2", "Expense"),
+      // (5056126351, "testing", 420.0, "2023-12-2", "Expense"),
+      // (9514090978, "testing", 420.0, "2023-12-2", "Earn"),
+      // (2727647166, "testing", 420.0, "2023-12-2", "Earn"),
+      // (7990108944, "testing", 420.0, "2023-12-2", "Expense"),
+      // (1234236845, "testing", 420.0, "2023-12-2", "Earn"),
+      // (1063620030, "testing", 420.0, "2023-12-2", "Earn"),
+      // (2884328870, "testing", 420.0, "2023-12-2", "Earn"),
+      // (8059116824, "testing", 420.0, "2023-12-2", "Expense"),
+      // (9182066726, "testing", 420.0, "2023-12-2", "Expense"),
+      // (6476168608, "testing", 420.0, "2023-12-2", "Expense")
+      // ''');
     });
   }
 
@@ -64,7 +65,7 @@ class DatabaseManager {
   }
 
   Future<List<Map>> retrieveTxn() async {
-    var db = await initializeDatabase();
+    var db = await getDB();
 
     List<Map<String, dynamic>> maps = await db.query(tableName);
 
@@ -78,17 +79,22 @@ class DatabaseManager {
     await db.update(tableName, txn.toMap(), where: 'id = ?', whereArgs: txn.toMap()['id']);
   }
 
-  Future deleteTxn(int id) async {
+  Future<List<Map>> deleteTxn(int id) async {
     var db = await getDB();
-    db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+    print(await retrieveTxn());
+    await db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+    return await retrieveTxn();
   }
 
   Future<List<Map>> dashBoard() async {
-    var db = await initializeDatabase();
+    // createSamples();
+    var db = await getDB();
 
     List<Map<String, dynamic>> maps = await db.rawQuery('SELECT SUM(price) as total, type FROM $tableName GROUP BY type');
 
+    print('DASHBOARD FINDINGS');
     print(maps);
+    // destroyDatabase();
     return maps;
   }
 }

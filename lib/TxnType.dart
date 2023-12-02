@@ -1,1 +1,1 @@
-enum TxnType {Earn, Expense}
+enum TxnType {Earn, Expense, None}

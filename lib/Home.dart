@@ -1,5 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peso_pal/constants.dart';
 
+import 'Analytics.dart';
+import 'ViewRecords.dart';
+
+
+enum NavBar {Home, Analytics}
 const activeCardColor = Color(0xFFC6C5B9);
 
 class HomePage extends StatefulWidget {
@@ -8,6 +15,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomePage> {
+  NavBar selectedNav = NavBar.Home;
+  double totalIncome = 0;
+  double totalExpenses = 0;
+  double totalBalance = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,11 +70,98 @@ class _HomeLayoutState extends State<HomePage> {
           Expanded(
             child: ReusableCard(
               color: activeCardColor,
+              cardChild: Column(
+                children: <Widget>[
+                  Text('Total Balance'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text('PHP'),
+                      Text('$totalBalance'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: 120.0,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFDFDFF),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.arrowtriangle_up_fill,
+                                  size: 20.0,
+                                  color: incomeArrowIn,
+                                ),
+                                Text('Income'),
+                              ],
+                            ),
+                            Text('$totalIncome'),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 120.0,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFDFDFF),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  CupertinoIcons.arrowtriangle_down_fill,
+                                  size: 20.0,
+                                  color: expensesArrowIn,
+                                ),
+                                Text('Expenses'),
+                              ],
+                            ),
+                            Text('$totalExpenses'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
             child: ReusableCard(
               color: activeCardColor,
+              cardChild: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Recent Transactions'),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ViewPage())
+                          );
+                        },
+                        child: Text(
+                          'See All',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -82,17 +181,37 @@ class _HomeLayoutState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  selectedNav = NavBar.Home;
+                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage())
+                );
+              },
               icon: Icon(
                 Icons.home,
-                color: Color(0xFF62929e),
+                  color: selectedNav == NavBar.Home
+                      ? Color(0xFF62929E)
+                      : Color(0xFFC6C5B9),
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  selectedNav = NavBar.Analytics;
+                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AnalyticsPage())
+                );
+              },
               icon: Icon(
                 Icons.pie_chart,
-                color: Color(0xFF62929e),
+                color: selectedNav == NavBar.Analytics
+                    ? Color(0xFF62929E)
+                    : Color(0xFFC6C5B9),
               ),
             ),
           ],
@@ -104,7 +223,8 @@ class _HomeLayoutState extends State<HomePage> {
 
 class ReusableCard extends StatelessWidget {
   final Color color;
-  ReusableCard({required this.color});
+  final Widget cardChild;
+  ReusableCard({required this.color, required this.cardChild});
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +234,7 @@ class ReusableCard extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(10.0),
       ),
+      child: cardChild,
     );
   }
 }

@@ -22,6 +22,7 @@ class AddPage extends StatefulWidget {
 
 class _AddRecordState extends State<AddPage> {
   TxnType selectedType = TxnType.Earn;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,53 @@ class _AddRecordState extends State<AddPage> {
               IconButton(
                 icon: Icon(Icons.cached),
                 color: Color(0xFF393D3F),
-                onPressed: () {},
+                onPressed: () {
+                  /*nameController.clear();
+                  dateController.clear();
+                  priceController.clear();*/
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text("Reset Update"),
+                      content: const Text("Are you sure you want to restart your edit progress?"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          child: Container(
+                            color: Color(0xFF546A7B),
+                            padding: const EdgeInsets.all(14),
+                            child: const Text(
+                              "No",
+                              style: TextStyle(
+                                color: Color(0xFFFFFFFF)
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            nameController.clear();
+                            dateController.clear();
+                            priceController.clear();
+                            Navigator.of(ctx).pop();
+                          },
+                          child: Container(
+                            color: Color(0xFF546A7B),
+                            padding: const EdgeInsets.all(14),
+                            child: const Text(
+                              "Yes",
+                              style: TextStyle(
+                                  color: Color(0xFFFFFFFF)
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -65,20 +112,36 @@ class _AddRecordState extends State<AddPage> {
             TextButton(
                 child: Icon(Icons.check, color: Color(0xFF62929E)),
                 onPressed: () {
-                  /* if(typeController.text == 'Earn') {
-                            DatabaseManager.instance.insertTxn(Earn(
-                                name: nameController.text,
-                                price: priceController.text,
-                                date: dateController.text));
-                            Navigator.pop(context, "Your todo has been saved.");
-                          }
-                          else {
-                            DatabaseManager.instance.insertTxn(Expense(
-                                name: nameController.text,
-                                price: priceController.text,
-                                date: dateController.text));
-                            Navigator.pop(context, "Your todo has been saved.");
-                          }*/
+                  if (_formKey.currentState!.validate()) {
+                    // If the form is valid, display a snackbar. In the real world,
+                    // you'd often call a server or save the information in a database.
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+                    DatabaseManager dbmn = DatabaseManager();
+                    dbmn.initializeDatabase();
+                    if (selectedType == TxnType.Earn) {
+                      print('You selected EARN');
+                      print('Txn Name: ${nameController.text}');
+                      print('Txn Price: ${priceController.text}');
+                      print('Txn Date: ${dateController.text}');
+                      print('ADDING TO DATABASE...');
+                      dbmn.insertTxn(Earn(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text)));
+                    }
+                    else if (selectedType == TxnType.Expense) {
+                      print('You selected EXPENSE');
+                      print('Txn Name: ${nameController.text}');
+                      print('Txn Price: ${priceController.text}');
+                      print('Txn Date: ${dateController.text}');
+                      print('ADDING TO DATABASE...');
+                      dbmn.insertTxn(Expense(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text)));
+                      dbmn.retrieveTxn();
+                    }
+                    else {
+                      print('ERROR: Please select an expense type');
+                      dbmn.retrieveTxn();
+                    }
+                  }
                 }),
           ],
         ),
@@ -87,6 +150,7 @@ class _AddRecordState extends State<AddPage> {
           child: Column(
             children: <Widget>[
               Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     SizedBox(
@@ -106,6 +170,12 @@ class _AddRecordState extends State<AddPage> {
                         ),
                         border: myInputBorder(),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(
                       width: 200.0,
@@ -155,7 +225,6 @@ class _AddRecordState extends State<AddPage> {
                     TextFormField(
                       controller: dateController,
                       /*inputFormatters: [
-                        // TODO: try a dropdown box for date input
                         // MaskTextInputFormatter(
                         //   mask: '####-##-##',
                         //   filter: {'#': RegExp(r'[0-9]')}
@@ -178,13 +247,19 @@ class _AddRecordState extends State<AddPage> {
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1950),
-                            lastDate: DateTime(2025));
+                            lastDate: DateTime.now());
 
                         if (pickedDate != null) {
                           setState(() {
                             dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
                           });
                         }
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a date';
+                        }
+                        return null;
                       },
                     ),
                     SizedBox(
@@ -203,12 +278,18 @@ class _AddRecordState extends State<AddPage> {
                         color: Color(0xFF393D3F),
                       ),
                       decoration: InputDecoration(
-                        labelText: 'Transaction Amouunt',
+                        labelText: 'Transaction Amount',
                         prefixIcon: Icon(
                           Icons.money,
                         ),
                         border: myInputBorder(),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
                     ),
                     // TextFormField(
                     //   cursorColor: Color(0xFF546A7B),
@@ -311,24 +392,6 @@ class _AddRecordState extends State<AddPage> {
                     //     ),
                     //   ),
                     // ),
-                    FloatingActionButton(
-                        child: Icon(Icons.check),
-                        onPressed: () {
-                         /* if(typeController.text == 'Earn') {
-                            DatabaseManager.instance.insertTxn(Earn(
-                                name: nameController.text,
-                                price: priceController.text,
-                                date: dateController.text));
-                            Navigator.pop(context, "Your todo has been saved.");
-                          }
-                          else {
-                            DatabaseManager.instance.insertTxn(Expense(
-                                name: nameController.text,
-                                price: priceController.text,
-                                date: dateController.text));
-                            Navigator.pop(context, "Your todo has been saved.");
-                          }*/
-                        }),
                   ],
                 ),
               ),

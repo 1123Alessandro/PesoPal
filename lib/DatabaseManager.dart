@@ -8,11 +8,14 @@ import 'Expense.dart';
 
 class DatabaseManager {
   //Create a private constructor
-  DatabaseManager._();
+  //DatabaseManager._();
 
-  static const databaseName = 'transaction_database.db';
+  String databaseName = 'transaction.db';
+  String tableName = 'Trnsctn';
+
+  /*static const databaseName = 'transaction_database.db';
   static final DatabaseManager instance = DatabaseManager._();
-  /*static Database _database;
+  static Database _database;
 
   Future<Database> get database async {
     if (_database == null) {
@@ -21,57 +24,77 @@ class DatabaseManager {
     return _database;
   }*/
 
-  initializeDatabase() async {
+  Future destroyDatabase() async {
+    String path =  join(await getDatabasesPath(), databaseName);
+    await deleteDatabase(path);
+  }
+
+  Future<Database> initializeDatabase() async {
+    print('CREATING DATABASE');
     return await openDatabase(join(await getDatabasesPath(), databaseName),
         version: 1, onCreate: (Database db, int version) async {
-          await db.execute(
-              "CREATE TABLE Transaction(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, type TEXT, name TEXT, date TEXT, amount DOUBLE)");
+          await db.execute('CREATE TABLE Trnsctn (id INTEGER PRIMARY KEY, type TEXT, name TEXT, date TEXT, price DOUBLE)');
+          // await db.execute('CREATE TABLE Test (id INTEGER PRIMARY KEY, name TEXT, value INTEGER, num REAL)');
         });
   }
-/*
-  insertTxn(Txn txn) async {
-    final db = await database;
-    var res;
+
+  Future<Database> getDB() async {
+    return openDatabase(databaseName);
+  }
+
+  Future insertTxn(Txn txn) async {
+    var db = await getDB();
+    print('CHECK THIS OUT');
+    print(db);
+    var id = await db.insert(tableName, txn.toMap());
+    // await db.transaction((tren) async {
+    //   int id = await tren.rawInsert('INSERT INTO Trnsctn(id, name, price, date, type) VALUES ("${txn.getID()}", "${txn.getName()}", ${txn.getPrice()}, "${txn.getDate().toString()}", "${txn.getType()}")');
+    // });
+    print('THIS IS THE ID AFTER INSERTING THE RECORD:\t${id}');
+    /* var res;
     if(txn is Earn)
       res = await db.insert(Txn.TABLENAME, earn.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     else
       res = await db.insert(Txn.TABLENAME, Expense.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace);
-    return res;
+    return res; */
   }
 
-  Future<List<Txn>> retrieveTxn() async {
-    final db = await database;
+  Future<List<Map>> retrieveTxn() async {
+    var db = await getDB();
 
-    final List<Map<String, dynamic>> maps = await db.query(Txn.TABLENAME);
+    List<Map<String, dynamic>> maps = await db.query(tableName);
 
-    return List.generate(maps.length, (i) {
-      return Txn(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        content: maps[i]['content'],
-      );
-    });
+    print(maps);
+    return maps;
+    // return List.generate(maps.length, (i) {
+    //   return Txn(
+    //     id: maps[i]['id'],
+    //     title: maps[i]['title'],
+    //     content: maps[i]['content'],
+    //   );
+    // });
   }
 
-  updateTxn(Txn txn) async {
-    final db = await database;
+  Future updateTxn(Txn txn) async {
+    var db = await getDB();
 
-    if(type == 'Earn')
-      await db.update(Txn.TABLENAME, Earn.toMap(),
-        where: 'id = ?',
-        whereArgs: [getID()],
-        conflictAlgorithm: ConflictAlgorithm.replace);
-    else
-      await db.update(Txn.TABLENAME, Expense.toMap(),
-          where: 'id = ?',
-          whereArgs: [todo.id],
-          conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.update(tableName, txn.toMap(), where: 'id = ?', whereArgs: txn.toMap()['id']);
+    // if(type == 'Earn')
+    //   await db.update(Txn.TABLENAME, Earn.toMap(),
+    //     where: 'id = ?',
+    //     whereArgs: [getID()],
+    //     conflictAlgorithm: ConflictAlgorithm.replace);
+    // else
+    //   await db.update(Txn.TABLENAME, Expense.toMap(),
+    //       where: 'id = ?',
+    //       whereArgs: [todo.id],
+    //       conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  deleteTxn(int id) async {
-    var db = await database;
-    db.delete(Txn.TABLENAME, where: 'id = ?', whereArgs: [id]);
-  }*/
+  Future deleteTxn(int id) async {
+    var db = await getDB();
+    db.delete(tableName, where: 'id = ?', whereArgs: [id]);
+  }
 }

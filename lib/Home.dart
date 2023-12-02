@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peso_pal/constants.dart';
+import 'package:pesopal/DatabaseManager.dart';
+import 'package:pesopal/TransactionHistory.dart';
+import 'constants.dart';
 
 import 'Analytics.dart';
 import 'ViewRecords.dart';
@@ -146,10 +148,18 @@ class _HomeLayoutState extends State<HomePage> {
                       Text('Recent Transactions'),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
+                          var db = DatabaseManager();
+                          db.createSamples();
+                          db.retrieveTxn().then((value) {
+                            Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => ViewPage())
-                          );
+                              MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
+                            );
+                          });
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => HistoryPage())
+                          // );
                         },
                         child: Text(
                           'See All',

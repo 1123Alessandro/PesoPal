@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pesopal/Transaction.dart';
 import 'constants.dart';
 import 'TxnType.dart';
 import 'DatabaseManager.dart';
@@ -11,13 +12,22 @@ int transactionPrice = 0;
 //final List<Map> items = List<String>.generate(10000, (i) => '$i');
 
 class HistoryPage extends StatefulWidget {
+
+  List<Map> lis;
+
+  HistoryPage({required this.lis});
+
   @override
-  _TransactionHistoryState createState() => _TransactionHistoryState();
+  _TransactionHistoryState createState() => _TransactionHistoryState(items: this.lis);
 }
 
 class _TransactionHistoryState extends State<HistoryPage> {
+
+  List<Map> items;
+  _TransactionHistoryState({required this.items});
+
   TxnType type = TxnType.Earn;
-  //List<Map> items = List<String>.generate(10000, (i) => '$i');
+  // List<String> items = List<String>.generate(10, (i) => '$i');
   //_TransactionHistoryState({required this.items});
 
   @override
@@ -51,9 +61,12 @@ class _TransactionHistoryState extends State<HistoryPage> {
       ),
       body: Center(
         child: ListView.builder(
-          //itemCount: items.length,
+          itemCount: items.length,
           itemBuilder: (context, index) {
-            if(type == TxnType.Earn) {
+            var currItem = items[index];
+            print(currItem['type']);
+            print(currItem['type'] == 'Earn');
+            if(currItem['type'] == 'Earn') {
               return ListTile(
                 leading:
                 Icon(
@@ -61,9 +74,9 @@ class _TransactionHistoryState extends State<HistoryPage> {
                   size: 30.0,
                   color: incomeArrowIn,
                 ),
-                //title: Text('Item ${items[index]}'),
-                subtitle: Text('Item description'),
-                trailing: Icon(Icons.more_vert),
+                title: Text(currItem['name']),
+                subtitle: Text(currItem['date']),
+                trailing: Text('Php ${currItem['price'].toString()}'),
               );
             }
             else {
@@ -71,12 +84,12 @@ class _TransactionHistoryState extends State<HistoryPage> {
                 leading:
                 Icon(
                   CupertinoIcons.arrowtriangle_down_fill,
-                  size: 100.0,
+                  size: 30.0,
                   color: expensesArrowIn,
                 ),
-                //title: Text('Item ${items[index]}'),
-                subtitle: Text('Item description'),
-                trailing: Icon(Icons.more_vert),
+                title: Text(currItem['name']),
+                subtitle: Text(currItem['date']),
+                trailing: Text('Php ${currItem['price'].toString()}'),
               );
             }
           },

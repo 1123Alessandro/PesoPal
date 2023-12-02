@@ -53,6 +53,10 @@ class Txn {
     this._type = type;
   }
 
+  void setID(String id) {
+    this._id = id;
+  }
+
   Map<String, dynamic> toMap() {
     return {};
   }

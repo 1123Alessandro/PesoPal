@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pesopal/AddRecord.dart';
 import 'Transaction.dart';
 import 'constants.dart';
 import 'TxnType.dart';
 import 'DatabaseManager.dart';
 import 'Home.dart';
 import 'EditRecord.dart';
+import 'main.dart';
+import 'UpdateRecord.dart';
 
 
 const activeCardColor = Color(0xFFC6C5B9);
@@ -58,6 +61,10 @@ class _TransactionHistoryState extends State<HistoryPage> {
               color: Color(0xFF62929E),
             ),
             onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UpdatePage(trenID: items[selected]['id'].toString(),))
+              );
               /*var db = DatabaseManager();
               db.createSamples();
               db.retrieveTxn().then((value) {
@@ -75,8 +82,8 @@ class _TransactionHistoryState extends State<HistoryPage> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               var currItem = items[index];
-              print(currItem['type']);
-              print(currItem['type'] == 'Earn');
+              // print(currItem['type']);
+              // print(currItem['type'] == 'Earn');
               if(currItem['type'] == 'Earn') {
                 return ListTile(
                     tileColor: selected == index? Color(0xFF62929E) : Color(0xFFFFFFFF),
@@ -92,7 +99,8 @@ class _TransactionHistoryState extends State<HistoryPage> {
                     onTap: () {
                       setState(() {
                         selected = index;
-
+                        print('YOU HAVE SELECTED THIS RECORD');
+                        print(items[selected]);
                       });
                     }
                 );
@@ -112,6 +120,8 @@ class _TransactionHistoryState extends State<HistoryPage> {
                   onTap: () {
                     setState(() {
                       selected = index;
+                      print('YOU HAVE SELECTED THIS RECORD');
+                      print(items[selected]);
                     });
                   }
                 );
@@ -123,7 +133,12 @@ class _TransactionHistoryState extends State<HistoryPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xFF62929e),
         foregroundColor: Color(0xFFFDFDFF),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddPage())
+          );
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
@@ -135,10 +150,14 @@ class _TransactionHistoryState extends State<HistoryPage> {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage())
-                );
+                DatabaseManager().dashBoard().then((value) {
+                  print('JJJJJJJJJJJJJSKDJFLSKDJFJ');
+                  print(value.length);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage(dash: (value.length <= 1) ? nones : value,))
+                  );
+                });
               },
               icon: Icon(
                 Icons.home,
@@ -171,6 +190,29 @@ class _TransactionHistoryState extends State<HistoryPage> {
                       TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop();
+                          print('DELETING RECORD');
+                          var record = items[selected];
+                          print(record);
+                          DatabaseManager().deleteTxn(record['id']).then((value) {
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HistoryPage(lis: value)), (route) => false);
+                          });
+                          // var db = DatabaseManager();
+                          // db.retrieveTxn().then((value) {
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
+                            // );
+                          //   print('CAN YOU PLEASE LOOK AT ME');
+                          //   print(value);
+                          //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HistoryPage(lis: value)), (route) => false);
+                          // });
+                          // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Home()), (route) => false);
+                          // DatabaseManager().dashBoard().then((value) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => HomePage(dash: (value.length < 1) ? nones : value,))
+                          //   );
+                          // });
                         },
                         child: Container(
                           color: Color(0xFF546A7B),

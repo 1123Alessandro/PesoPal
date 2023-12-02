@@ -9,6 +9,7 @@ import 'DatabaseManager.dart';
 import 'Earn.dart';
 import 'Expense.dart';
 import 'TxnType.dart';
+import 'TransactionHistory.dart';
 
 const activeCardColor = Color(0xFFC6C5B9);
 final nameController = TextEditingController();
@@ -127,7 +128,9 @@ class _AddRecordState extends State<AddPage> {
                       print('Txn Price: ${priceController.text}');
                       print('Txn Date: ${dateController.text}');
                       print('ADDING TO DATABASE...');
-                      dbmn.insertTxn(Earn(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text)));
+                      dbmn.insertTxn(Earn(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text))).then((value) {
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HistoryPage(lis: value)), (route) => false);
+                      });
                     }
                     else if (selectedType == TxnType.Expense) {
                       print('You selected EXPENSE');
@@ -135,8 +138,9 @@ class _AddRecordState extends State<AddPage> {
                       print('Txn Price: ${priceController.text}');
                       print('Txn Date: ${dateController.text}');
                       print('ADDING TO DATABASE...');
-                      dbmn.insertTxn(Expense(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text)));
-                      dbmn.retrieveTxn();
+                      dbmn.insertTxn(Expense(name: nameController.text, price: double.parse(priceController.text), date: DateTime.parse(dateController.text))).then((value) {
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HistoryPage(lis: value)), (route) => false);
+                      });
                     }
                     else {
                       print('ERROR: Please select an expense type');

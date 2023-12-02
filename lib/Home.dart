@@ -5,6 +5,7 @@ import 'constants.dart';
 import 'Analytics.dart';
 import 'TransactionHistory.dart';
 import 'DatabaseManager.dart';
+import 'AddRecord.dart';
 
 
 enum NavBar {Home, Analytics}
@@ -222,7 +223,6 @@ class _HomeLayoutState extends State<HomePage> {
                       TextButton(
                         onPressed: () {
                           var db = DatabaseManager();
-                          db.createSamples();
                           db.retrieveTxn().then((value) {
                             Navigator.push(
                                 context,
@@ -256,18 +256,10 @@ class _HomeLayoutState extends State<HomePage> {
         backgroundColor: Color(0xFF62929e),
         foregroundColor: Color(0xFFFDFDFF),
         onPressed: () {
-          print('hello po');
-          // DatabaseManager().dashBoard().then((value) {
-          //   Navigator.push(
-          //     context,
-          //     MaterialPageRoute(builder: (context) => HomePage())
-          //   );
-          // });
-          // db.retrieveTxn().then((value) {
-          // Navigator.push(
-          // context,
-          // MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
-          // );
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddPage())
+          );
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

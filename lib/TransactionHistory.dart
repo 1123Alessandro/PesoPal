@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pesopal/Transaction.dart';
+import 'Transaction.dart';
 import 'constants.dart';
 import 'TxnType.dart';
 import 'DatabaseManager.dart';
+import 'Home.dart';
+import 'EditRecord.dart';
+
 
 const activeCardColor = Color(0xFFC6C5B9);
 String transactionName = '';
 String transactionDate = '';
 int transactionPrice = 0;
 //final List<Map> items = List<String>.generate(10000, (i) => '$i');
+int selected = 0;
 
 class HistoryPage extends StatefulWidget {
 
@@ -22,7 +26,6 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _TransactionHistoryState extends State<HistoryPage> {
-
   List<Map> items;
   _TransactionHistoryState({required this.items});
 
@@ -54,50 +57,67 @@ class _TransactionHistoryState extends State<HistoryPage> {
               Icons.edit,
               color: Color(0xFF62929E),
             ),
-            // TODO: select record when clicked
-            onPressed: () {},
+            onPressed: () {
+              /*var db = DatabaseManager();
+              db.createSamples();
+              db.retrieveTxn().then((value) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditPage(lis: value,))
+                );
+              });*/
+            },
           ),
         ],
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            var currItem = items[index];
-            print(currItem['type']);
-            print(currItem['type'] == 'Earn');
-            if(currItem['type'] == 'Earn') {
-              return ListTile(
-                leading:
-                Icon(
-                  CupertinoIcons.arrowtriangle_up_fill,
-                  size: 30.0,
-                  color: incomeArrowIn,
-                ),
-                title: Text(currItem['name']),
-                subtitle: Text(currItem['date']),
-                trailing: Text('Php ${currItem['price'].toString()}'),
-              );
-            }
-            else {
-              return ListTile(
-                leading:
-                Icon(
-                  CupertinoIcons.arrowtriangle_down_fill,
-                  size: 30.0,
-                  color: expensesArrowIn,
-                ),
-                title: Text(currItem['name']),
-                subtitle: Text(currItem['date']),
-                trailing: Text('Php ${currItem['price'].toString()}'),
-              );
-            }
-          },
-        )
-          // TODO: depends on the number of records
-          // TODO: change Expanded
+          child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              var currItem = items[index];
+              print(currItem['type']);
+              print(currItem['type'] == 'Earn');
+              if(currItem['type'] == 'Earn') {
+                return ListTile(
+                    tileColor: selected == index? Color(0xFF62929E) : Color(0xFFFFFFFF),
+                    leading: Icon(
+                      CupertinoIcons.arrowtriangle_up_fill,
+                      size: 30.0,
+                      color: incomeArrowIn,
+                    ),
+                    title: Text(currItem['name']),
+                    subtitle: Text(currItem['date']),
+                    trailing: Text('PHP ${currItem['price'].toString()}'),
+                    hoverColor: Color(0xFF62929E),
+                    onTap: () {
+                      setState(() {
+                        selected = index;
 
-          // TODO: add Previous and Next TextButtons
+                      });
+                    }
+                );
+              }
+              else {
+                return ListTile(
+                  tileColor: selected == index? Color(0xFF62929E) : Color(0xFFFFFFFF),
+                  leading: Icon(
+                    CupertinoIcons.arrowtriangle_down_fill,
+                    size: 30.0,
+                    color: expensesArrowIn,
+                  ),
+                  title: Text(currItem['name']),
+                  subtitle: Text(currItem['date']),
+                  trailing: Text('Php ${currItem['price'].toString()}'),
+                  hoverColor: Color(0xFF62929E),
+                  onTap: () {
+                    setState(() {
+                      selected = index;
+                    });
+                  }
+                );
+              }
+            },
+          )
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
@@ -114,14 +134,59 @@ class _TransactionHistoryState extends State<HistoryPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage())
+                );
+              },
               icon: Icon(
                 Icons.home,
                 color: Color(0xFF62929e),
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Delete Record"),
+                    content: const Text("Are you sure you want to remove this record?"),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                        },
+                        child: Container(
+                          color: Color(0xFF546A7B),
+                          padding: const EdgeInsets.all(14),
+                          child: const Text(
+                            "No",
+                            style: TextStyle(
+                                color: Color(0xFFFFFFFF)
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                        },
+                        child: Container(
+                          color: Color(0xFF546A7B),
+                          padding: const EdgeInsets.all(14),
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(
+                                color: Color(0xFFFFFFFF)
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
               icon: Icon(
                 Icons.delete,
                 color: Color(0xFF62929e),
@@ -134,11 +199,10 @@ class _TransactionHistoryState extends State<HistoryPage> {
   }
 }
 
-/*class ReusableCard extends StatelessWidget {
+class ReusableCard extends StatelessWidget {
   final Color color;
   final IconData icon;
   final Text text;
-  final Widget leading;
 
   ReusableCard({required this.color, required this.icon, required this.text});
 
@@ -155,4 +219,4 @@ class _TransactionHistoryState extends State<HistoryPage> {
       trailing: Text('$transactionPrice'),
     );
   }
-}*/
+}

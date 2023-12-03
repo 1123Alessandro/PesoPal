@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'Home.dart';
 import 'constants.dart';
 import 'DatabaseManager.dart';
+import 'Conform.dart';
 
 enum NavBar {Home, Analytics}
 const activeCardColor = Color(0xFFC6C5B9);
@@ -101,7 +102,7 @@ class _AnalyticsState extends State<AnalyticsPage> {
                   DatabaseManager().dashBoard().then((value) {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage(dash: (value.length <= 1) ? nones : value,))
+                        MaterialPageRoute(builder: (context) => HomePage(dash: (value[0].length <= 1) ? conformDash(value[0]) : value[0], recs: conformRecs(value[1]),))
                     );
                   });
                 },

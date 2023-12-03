@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'Home.dart';
 import 'DatabaseManager.dart';
 import 'constants.dart';
+import 'Conform.dart';
 
 
 class WelcomePage extends StatefulWidget {
@@ -63,7 +64,7 @@ class _WelcomeState extends State<WelcomePage> {
                             DatabaseManager().dashBoard().then((value) {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HomePage(dash: (value.length <= 1) ? nones : value,))
+                                  MaterialPageRoute(builder: (context) => HomePage(dash: (value[0].length <= 1) ? conformDash(value[0]) : value[0], recs: conformRecs(value[1]),))
                               );
                             });
                           },

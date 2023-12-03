@@ -65,7 +65,7 @@ class DatabaseManager {
   Future<List<Map>> retrieveTxn() async {
     var db = await getDB();
 
-    List<Map<String, dynamic>> maps = await db.query(tableName);
+    List<Map<String, dynamic>> maps = await db.query(tableName, orderBy: 'date');
 
     print(maps);
     return maps;
@@ -84,15 +84,18 @@ class DatabaseManager {
     return await retrieveTxn();
   }
 
-  Future<List<Map>> dashBoard() async {
+  Future<List<List<Map>>> dashBoard() async {
     // createSamples();
     var db = await getDB();
 
     List<Map<String, dynamic>> maps = await db.rawQuery('SELECT SUM(price) as total, type FROM $tableName GROUP BY type');
+    List<Map<String, dynamic>> recents = await db.rawQuery('SELECT * FROM $tableName ORDER BY date LIMIT 3');
 
     print('DASHBOARD FINDINGS');
     print(maps);
+    print('RECENTS');
+    print(recents);
     // destroyDatabase();
-    return maps;
+    return [maps, recents];
   }
 }

@@ -7,6 +7,7 @@ import 'DatabaseManager.dart';
 import 'Home.dart';
 import 'AddRecord.dart';
 import 'UpdateRecord.dart';
+import 'Conform.dart';
 
 
 const activeCardColor = Color(0xFFC6C5B9);
@@ -175,7 +176,7 @@ class _TransactionHistoryState extends State<HistoryPage> {
                   print(value.length);
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage(dash: (value.length <= 1) ? nones : value,))
+                      MaterialPageRoute(builder: (context) => HomePage(dash: (value[0].length <= 1) ? conformDash(value[0]) : value[0], recs: conformRecs(value[1]),))
                   );
                 });
               },

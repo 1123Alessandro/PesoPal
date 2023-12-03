@@ -2,18 +2,18 @@ import 'Transaction.dart';
 import 'TxnType.dart';
 import 'dart:core';
 
-class Earn extends Transaction {
+class Earn extends Txn {
 
-  TxnType type = TxnType.Earn;
-
-  Earn({required name, required price, required date}) : super(name: name, price: price, date: date);
+  Earn({required name, required price, required date}) : super(name: name, price: price, date: date) {
+    this.setType(TxnType.Earn);
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'id': this.getID(),
       'name': this.getName(),
       'price': this.getPrice(),
-      'date': this.getDate(),
+      'date': this.getDate().toString(),
       'type': 'Earn',
     };
   }

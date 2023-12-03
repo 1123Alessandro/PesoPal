@@ -1,13 +1,16 @@
 import 'dart:core';
 import 'package:intl/intl.dart';
+import 'TxnType.dart';
 
-class Transaction {
+class Txn {
   String _name = 'test';
   double _price = 0.00;
   String _id = '000';
   DateTime _date = DateTime(1970, 4, 1);
+  TxnType _type = TxnType.None;
+  static const String TABLENAME = "Transaction";
 
-  Transaction({required name, required price, required date}) {
+  Txn({required name, required price, required date}) {
     this._name = name;
     this._price = price;
     this._date = date;
@@ -30,6 +33,10 @@ class Transaction {
     return this._date;
   }
 
+  TxnType getType() {
+    return this._type;
+  }
+
   void setName(String name) {
     this._name = name;
   }
@@ -40,5 +47,17 @@ class Transaction {
 
   void setDate(DateTime date) {
     this._date = date;
+  }
+
+  void setType(TxnType type) {
+    this._type = type;
+  }
+
+  void setID(String id) {
+    this._id = id;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {};
   }
 }

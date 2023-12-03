@@ -1,5 +1,5 @@
-name: pesopal
-description: "FAP"
+name: peso_pal
+description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.0-210.0.dev <4.0.0'
+  sdk: '>=3.1.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,9 +35,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  intl: ^0.18.1
   sqflite: ^2.3.0
+  path: ^1.8.3
+  intl: ^0.18.1
   fl_chart: ^0.65.0
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +62,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+     - assets/images/money_transfer.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -77,6 +81,19 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Agrandir
+      fonts:
+        - asset: assets/fonts/Agrandir-Narrow.otf
+          weight: 200
+        - asset: assets/fonts/Agrandir-Regular.otf
+        - asset: assets/fonts/Agrandir-ThinItalic.otf
+          style: italic
+        - asset: assets/fonts/Agrandir-TextBold.otf
+          weight: 600
+        - asset: assets/fonts/Agrandir-GrandHeavy.otf
+          weight: 900
+
   # fonts:
   #   - family: Schyler
   #     fonts:

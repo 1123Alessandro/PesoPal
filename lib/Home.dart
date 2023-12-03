@@ -1,34 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'dart:math';
 
 import 'Analytics.dart';
 import 'TransactionHistory.dart';
 import 'DatabaseManager.dart';
 import 'AddRecord.dart';
-
+import 'Recents.dart';
 
 enum NavBar {Home, Analytics}
 const activeCardColor = Color(0xFFC6C5B9);
 
 class HomePage extends StatefulWidget {
-
   List<Map> dash;
-  HomePage({required this.dash});
+  List<Map> recs;
+  var delete;
+  HomePage({required this.dash, required this.recs});
 
   @override
-  _HomeLayoutState createState() => _HomeLayoutState(dash: this.dash);
+  _HomeLayoutState createState() => _HomeLayoutState(dash: this.dash, recs: this.recs);
 }
 
 class _HomeLayoutState extends State<HomePage> {
-
   List<Map> dash;
+  List<Map> recs;
   NavBar selectedNav = NavBar.Home;
   double totalIncome = 500;
   double totalExpenses = 45;
-  // double totalBalance = 0;
+  //double totalBalance = 0;
 
-  _HomeLayoutState({required this.dash}) {
+  _HomeLayoutState({required this.dash, required this.recs}) {
     totalIncome = (dash[0]['type'] == 'Earn') ? dash[0]['total'] : dash[1]['total'];
     totalExpenses = (dash[0]['type'] == 'Expense') ? dash[0]['total'] : dash[1]['total'];
     print('LOOK AT THIS DASHBOARD');
@@ -37,54 +39,15 @@ class _HomeLayoutState extends State<HomePage> {
     print(totalExpenses);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: const Icon(
-            Icons.account_circle_rounded,
-            color: Color(0xFF393D3F),
-            size: 50,
-          ),
-        ),
-        title: Column(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(bottom: 2.5),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Welcome back,',
-                  style: TextStyle(
-                    color: Color(0xFF0A090C),
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  'Juan dela Cruz!',
-                  style: TextStyle(
-                    color: Color(0xFF546A7B),
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      // TODO: fix layout inside the first Expanded widget
       body: Column(
         children: <Widget>[
+          SizedBox(
+            width: 10.0,
+            height: 50.0,
+          ),
           Expanded(
             child: ReusableCard(
               color: activeCardColor,
@@ -94,6 +57,7 @@ class _HomeLayoutState extends State<HomePage> {
                   Text(
                     'Total Balance',
                     style: TextStyle(
+                      fontFamily: 'Agrandir',
                       fontWeight: FontWeight.w600,
                       fontSize: 25.0,
                     ),
@@ -104,14 +68,16 @@ class _HomeLayoutState extends State<HomePage> {
                       Text(
                         'PHP',
                         style: TextStyle(
-                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Agrandir',
+                          fontWeight: FontWeight.w900,
                           fontSize: 25.0,
                         ),
                       ),
                       Text(
-                        '${totalIncome - totalExpenses}',
+                        '${((totalIncome - totalExpenses).toStringAsFixed(2))}',
                         style: TextStyle(
-                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Agrandir',
+                          fontWeight: FontWeight.w900,
                           fontSize: 45.0,
                         ),
                       ),
@@ -139,11 +105,11 @@ class _HomeLayoutState extends State<HomePage> {
                                       color: incomeArrowIn,
                                     ),
                                     SizedBox(
-                                      width: 10.0,
+                                      width: 5.0,
                                       height: 20.0,
                                     ),
                                     Text(
-                                      '$totalIncome',
+                                      '${totalIncome.toStringAsFixed(2)}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 20.0,
@@ -178,11 +144,11 @@ class _HomeLayoutState extends State<HomePage> {
                                     color: expensesArrowIn,
                                   ),
                                   SizedBox(
-                                    width: 10.0,
+                                    width: 5.0,
                                     height: 20.0,
                                   ),
                                   Text(
-                                    '$totalExpenses',
+                                    '${totalExpenses.toStringAsFixed(2)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 20.0,
@@ -208,45 +174,105 @@ class _HomeLayoutState extends State<HomePage> {
                 color: activeCardColor,
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Recent Transactions',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          var db = DatabaseManager();
-                          db.retrieveTxn().then((value) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
-                            );
-                          });
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => HistoryPage())
-                          // );
-                        },
-                        child: Text(
-                          'See All',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15.0,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              child: recents(context, recs),
+              // child: Column(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: <Widget>[
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Text(
+              //           'Recent Transactions',
+              //           style: TextStyle(
+              //             fontFamily: 'Agrandir',
+              //             fontWeight: FontWeight.w600,
+              //             fontSize: 20.0,
+              //           ),
+              //         ),
+              //         TextButton(
+              //           onPressed: () {
+              //             var db = DatabaseManager();
+              //             db.retrieveTxn().then((value) {
+              //               Navigator.push(
+              //                   context,
+              //                   MaterialPageRoute(builder: (context) => HistoryPage(lis: value,))
+              //               );
+              //             });
+              //           },
+              //           child: Text(
+              //             'See All',
+              //             style: TextStyle(
+              //               fontFamily: 'Agrandir',
+              //               fontWeight: FontWeight.w600,
+              //               fontSize: 15.0,
+              //               decoration: TextDecoration.underline,
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: Color(0xFFFDFDFF),
+              //         borderRadius: BorderRadius.circular(10.0),
+              //       ),
+              //       child: ListTile (
+              //         leading: Icon(
+              //           CupertinoIcons.arrowtriangle_up_fill,
+              //           size: 30.0,
+              //           color: incomeArrowIn,
+              //         ),
+              //         /*title: Text(currItem['name']),
+              //             subtitle: Text(currItem['date']),
+              //             trailing: Text('PHP ${currItem['price'].toString()}'),*/
+              //         title: Text('Item 1'),
+              //         subtitle: Text('Item description'),
+              //         trailing: Icon(Icons.more_vert),
+              //         hoverColor: Color(0xFF62929E),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: Color(0xFFFDFDFF),
+              //         borderRadius: BorderRadius.circular(10.0),
+              //       ),
+              //       child: ListTile (
+              //         leading: Icon(
+              //           CupertinoIcons.arrowtriangle_up_fill,
+              //           size: 30.0,
+              //           color: incomeArrowIn,
+              //         ),
+              //         /*title: Text(currItem['name']),
+              //             subtitle: Text(currItem['date']),
+              //             trailing: Text('PHP ${currItem['price'].toString()}'),*/
+              //         title: Text('Item 1'),
+              //         subtitle: Text('Item description'),
+              //         trailing: Icon(Icons.more_vert),
+              //         hoverColor: Color(0xFF62929E),
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //         color: Color(0xFFFDFDFF),
+              //         borderRadius: BorderRadius.circular(10.0),
+              //       ),
+              //       child: ListTile (
+              //         leading: Icon(
+              //           CupertinoIcons.arrowtriangle_up_fill,
+              //           size: 30.0,
+              //           color: incomeArrowIn,
+              //         ),
+              //         /*title: Text(currItem['name']),
+              //             subtitle: Text(currItem['date']),
+              //             trailing: Text('PHP ${currItem['price'].toString()}'),*/
+              //         title: Text('Item 1'),
+              //         subtitle: Text('Item description'),
+              //         trailing: Icon(Icons.more_vert),
+              //         hoverColor: Color(0xFF62929E),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ),
           ),
         ],
@@ -275,10 +301,6 @@ class _HomeLayoutState extends State<HomePage> {
                 setState(() {
                   selectedNav = NavBar.Home;
                 });
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(builder: (context) => HomePage())
-                // );
               },
               icon: Icon(
                 Icons.home,
@@ -292,10 +314,13 @@ class _HomeLayoutState extends State<HomePage> {
                 setState(() {
                   selectedNav = NavBar.Analytics;
                 });
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AnalyticsPage())
-                );
+                var db = DatabaseManager();
+                db.retrieveTxn().then((value) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AnalyticsPage(lis: value,))
+                  );
+                });
               },
               icon: Icon(
                 Icons.pie_chart,
